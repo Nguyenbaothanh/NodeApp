@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'docker:stable'
+            image 'node:18' // Image có Git và Node.js
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
@@ -15,6 +15,7 @@ pipeline {
     stages {
         stage('Checkout Github') {
             steps {
+                cleanWs() // Xóa sạch workspace
                 git branch: 'main', credentialsId: 'jen-docker-github', url: 'https://github.com/Nguyenbaothanh/NodeApp.git'
             }
         }        
@@ -52,10 +53,10 @@ pipeline {
     }
     post {
         success {
-            echo 'Build&Deploy completed successfully!'
+            echo 'Build & Deploy hoàn tất thành công!'
         }
         failure {
-            echo 'Build&Deploy failed. Check logs.'
+            echo 'Build & Deploy thất bại. Kiểm tra log.'
         }
     }
 }
