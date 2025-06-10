@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'node:18' // Image có Git và Node.js
-            args '-e DOCKER_HOST=tcp://host.docker.internal:2375'
+            args '-e DOCKER_HOST=tcp://host.docker.internal:2375 --user root'
         }
     }
     tools {
