@@ -37,9 +37,6 @@ pipeline {
             }
         }
         stage('Deploy to Server') {
-            when {
-                branch 'main'
-            }
             steps {
                 echo 'Deploying to server...'
                 sh '''
