@@ -19,6 +19,14 @@ pipeline {
                 git branch: 'main', credentialsId: 'jen-docker-github', url: 'https://github.com/Nguyenbaothanh/NodeApp.git'
             }
         }        
+        stage('Setup Docker CLI') {
+            steps {
+                sh '''
+                    apt-get update
+                    apt-get install -y docker.io
+                '''
+            }
+        }
         stage('Install node dependencies') {
             steps {
                 sh 'npm install'
@@ -34,6 +42,16 @@ pipeline {
                 script {
                     dockerImage = docker.build("${DOCKER_HUB_REPO}:latest")
                 }
+            }
+        }
+        stage('Install Trivy') {
+            steps {
+                sh '''
+                    apt-get update
+                    apt-get install -y wget
+                    wget https://github.com/aquasecurity/trivy/releases/download/v0.45.1/trivy_0.45.1_Linux-64bit.deb
+                    dpkg -i trivy_0.45.1_Linux-64bit.deb
+                '''
             }
         }
         stage('Trivy Scan') {
